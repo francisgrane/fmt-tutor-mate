@@ -27,13 +27,10 @@ public class AgendaModel {
     @Column(nullable = false)
     private LocalDate data;
 
-    @Column(nullable = false)
     private String status;
 
-    @Column(nullable = false)
     private String tema;
 
-    @Column(nullable = false)
     private String descricao;
 
     public AgendaModel() {
