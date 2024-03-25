@@ -22,7 +22,7 @@ public class AlunoService {
         return alunoRepository.findById(id);
     }
 
-    public ArrayList<AlunoModel> buscaTodosOsAlunos() {
+    public ArrayList<AlunoModel> listarTodosOsAlunos() {
         return (ArrayList<AlunoModel>) alunoRepository.findAll();
     }
 

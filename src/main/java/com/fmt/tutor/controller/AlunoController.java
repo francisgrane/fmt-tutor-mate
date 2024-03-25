@@ -25,7 +25,7 @@ public class AlunoController {
 
     @GetMapping
     public ResponseEntity<ArrayList<AlunoModel>> buscarTodosOsAlunos() {
-        ArrayList<AlunoModel> alunos = alunoService.buscaTodosOsAlunos();
+        ArrayList<AlunoModel> alunos = alunoService.listarTodosOsAlunos();
         if (alunos.isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
