@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
@@ -20,6 +21,16 @@ public class AlunoController {
     public ResponseEntity<AlunoModel> criarAluno(@RequestBody AlunoModel aluno) {
         AlunoModel novoAluno = alunoService.criarAluno(aluno);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoAluno);
+    }
+
+    @GetMapping
+    public ResponseEntity<ArrayList<AlunoModel>> buscarTodosOsAlunos() {
+        ArrayList<AlunoModel> alunos = alunoService.buscaTodosOsAlunos();
+        if (alunos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(alunos);
+        }
     }
 
     @GetMapping("/{id}")
