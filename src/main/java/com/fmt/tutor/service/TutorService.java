@@ -5,6 +5,7 @@ import com.fmt.tutor.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +23,8 @@ public class TutorService {
         return tutorRepository.findById(id);
     }
 
-    public List<TutorModel> listarTodosOsTutores() {
-        return tutorRepository.findAll();
+    public ArrayList<TutorModel> listarTodosOsTutores() {
+        return (ArrayList<TutorModel>) tutorRepository.findAll();
     }
 
     public void deletarTutorPorId(Integer id) {
