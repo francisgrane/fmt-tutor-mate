@@ -1,5 +1,6 @@
 package com.fmt.tutor.service;
 
+import com.fmt.tutor.exception.ResourceNotFoundException;
 import com.fmt.tutor.model.AgendaModel;
 import com.fmt.tutor.repository.AgendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class AgendaService {
     }
 
     public Optional<AgendaModel> buscarAgendaPorId(Integer id) {
+        if (!agendaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Agenda não encontrada.");
+        }
         return agendaRepository.findById(id);
     }
 
@@ -33,14 +37,17 @@ public class AgendaService {
 
     public AgendaModel atualizarAgenda(Integer id, AgendaModel updatedAgenda) {
         if (agendaRepository.existsById(id)) {
-            updatedAgenda.setId(id);
             return agendaRepository.save(updatedAgenda);
         } else {
-            throw new IllegalArgumentException("Agenda with ID " + id + " not found.");
+            throw new ResourceNotFoundException("Id da Agenda não encontrado.");
         }
     }
 
     public void deletarAgendaPorId(Integer id) {
-        agendaRepository.deleteById(id);
+        if (!agendaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Id da Agenda não encontrado.");
+        } else {
+            agendaRepository.deleteById(id);
+        }
     }
 }

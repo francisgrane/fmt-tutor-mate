@@ -1,6 +1,8 @@
 package com.fmt.tutor.controller;
 
+import com.fmt.tutor.exception.ResourceNotFoundException;
 import com.fmt.tutor.model.TutorModel;
+import com.fmt.tutor.service.AgendaService;
 import com.fmt.tutor.service.TutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +16,11 @@ import java.util.Optional;
 @RequestMapping("/tutores")
 public class TutorController {
 
-    @Autowired
     private TutorService tutorService;
 
-    @PostMapping
-    public ResponseEntity<TutorModel> criarTutor(@RequestBody TutorModel tutor) {
-        TutorModel novoTutor = tutorService.criarTutor(tutor);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoTutor);
+    @Autowired
+    public TutorController(TutorService tutorService) {
+        this.tutorService = tutorService;
     }
 
     @GetMapping
@@ -32,6 +32,13 @@ public class TutorController {
             return ResponseEntity.ok(tutores);
         }
     }
+
+    @PostMapping
+    public ResponseEntity<TutorModel> criarTutor(@RequestBody TutorModel tutor) {
+        TutorModel novoTutor = tutorService.criarTutor(tutor);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoTutor);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<TutorModel> buscarTutor(@PathVariable Integer id) {
@@ -47,16 +54,21 @@ public class TutorController {
             TutorModel tutorExistente = tutorOptional.get();
             tutorExistente.setNome(tutorAtualizado.getNome());
             tutorExistente.setEspecialidade(tutorAtualizado.getEspecialidade());
-            TutorModel tutorAtualizadoSalvo = tutorService.atualizarTutor(tutorExistente);
+            TutorModel tutorAtualizadoSalvo = tutorService.atualizarTutor(id, tutorExistente);
             return ResponseEntity.ok(tutorAtualizadoSalvo);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Tutor não encontrado para atualizar.");
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarTutor(@PathVariable Integer id) {
-        tutorService.deletarTutorPorId(id);
-        return ResponseEntity.noContent().build();
+        Optional<TutorModel> tutorOptional = tutorService.buscarTutorPorId(id);
+        if (tutorOptional.isPresent()) {
+            tutorService.deletarTutorPorId(id);
+        } else {
+            throw new ResourceNotFoundException("Tutor não encontrado para deletar.");
+        }
+        return null;
     }
 }

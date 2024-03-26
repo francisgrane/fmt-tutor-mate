@@ -1,5 +1,6 @@
 package com.fmt.tutor.service;
 
+import com.fmt.tutor.exception.ResourceNotFoundException;
 import com.fmt.tutor.model.AlunoModel;
 import com.fmt.tutor.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,12 @@ import java.util.Optional;
 @Service
 public class AlunoService {
 
+    private final AlunoRepository alunoRepository;
+
     @Autowired
-    private AlunoRepository alunoRepository;
+    public AlunoService(AlunoRepository alunoRepository) {
+        this.alunoRepository = alunoRepository;
+    }
 
     public AlunoModel criarAluno(AlunoModel aluno) {
         return alunoRepository.save(aluno);
@@ -23,14 +28,21 @@ public class AlunoService {
     }
 
     public ArrayList<AlunoModel> listarTodosOsAlunos() {
-        return (ArrayList<AlunoModel>) alunoRepository.findAll();
+        return new ArrayList<>(alunoRepository.findAll());
     }
 
-    public AlunoModel atualizarAluno(AlunoModel aluno) {
-        return alunoRepository.save(aluno);
+    public AlunoModel atualizarAluno(Integer id, AlunoModel alunoAtualizado) {
+        if (alunoRepository.existsById(id)) {
+            return alunoRepository.save(alunoAtualizado);
+        } else {
+            throw new ResourceNotFoundException("Id do Aluno não encontrado.");
+        }
     }
 
     public void deletarAlunoPorId(Integer id) {
+        if (!alunoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Id do Aluno não encontrado.");
+        }
         alunoRepository.deleteById(id);
     }
 }

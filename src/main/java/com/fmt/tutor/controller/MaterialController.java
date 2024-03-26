@@ -1,5 +1,6 @@
 package com.fmt.tutor.controller;
 
+import com.fmt.tutor.exception.ResourceNotFoundException;
 import com.fmt.tutor.model.MaterialModel;
 import com.fmt.tutor.service.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class MaterialController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MaterialModel> buscarMaterial(@PathVariable Integer id) {
+    public ResponseEntity<MaterialModel> buscarMaterialPorId(@PathVariable Integer id) {
         Optional<MaterialModel> materialOptional = materialService.buscarMaterialPorId(id);
         return materialOptional.map(material -> ResponseEntity.ok().body(material))
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -49,16 +50,22 @@ public class MaterialController {
     public ResponseEntity<MaterialModel> atualizarMaterial(@PathVariable Integer id, @RequestBody MaterialModel materialAtualizado) {
         Optional<MaterialModel> materialOptional = materialService.buscarMaterialPorId(id);
         if (materialOptional.isPresent()) {
-            MaterialModel materialAtualizadoSalvo = materialService.atualizarMaterial(materialAtualizado);
+            MaterialModel materialExistente = materialOptional.get();
+            MaterialModel materialAtualizadoSalvo = materialService.atualizarMaterial(id, materialExistente);
             return ResponseEntity.ok(materialAtualizadoSalvo);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Material não encontrado para atualizar.");
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarMaterial(@PathVariable Integer id) {
-        materialService.deletarMaterialPorId(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletarMaterialPorId(@PathVariable Integer id) {
+        Optional<MaterialModel> materialOptional = materialService.buscarMaterialPorId(id);
+        if (materialOptional.isPresent()) {
+            materialService.deletarMaterialPorId(id);
+        } else {
+            throw new ResourceNotFoundException("Material não encontrado para deletar.");
+        }
+        return null;
     }
 }

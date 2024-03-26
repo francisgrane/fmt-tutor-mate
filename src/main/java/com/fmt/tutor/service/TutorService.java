@@ -1,5 +1,6 @@
 package com.fmt.tutor.service;
 
+import com.fmt.tutor.exception.ResourceNotFoundException;
 import com.fmt.tutor.model.TutorModel;
 import com.fmt.tutor.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class TutorService {
     }
 
     public Optional<TutorModel> buscarTutorPorId(Integer id) {
+        if (!tutorRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Tutor não encontrado.");
+        }
         return tutorRepository.findById(id);
     }
 
@@ -28,10 +32,18 @@ public class TutorService {
     }
 
     public void deletarTutorPorId(Integer id) {
-        tutorRepository.deleteById(id);
+        if (!tutorRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Id do Tutor não encontrado.");
+        } else {
+            tutorRepository.deleteById(id);
+        }
     }
 
-    public TutorModel atualizarTutor(TutorModel tutorAtualizado) {
-        return tutorRepository.save(tutorAtualizado);
+    public TutorModel atualizarTutor(Integer id, TutorModel tutorAtualizado) {
+        if (tutorRepository.existsById(id)) {
+            return tutorRepository.save(tutorAtualizado);
+        } else {
+            throw new ResourceNotFoundException("Id do Tutor não encontrado.");
+        }
     }
 }

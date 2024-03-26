@@ -1,5 +1,6 @@
 package com.fmt.tutor.service;
 
+import com.fmt.tutor.exception.ResourceNotFoundException;
 import com.fmt.tutor.model.MaterialModel;
 import com.fmt.tutor.repository.MaterialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,24 @@ public class MaterialService {
     }
 
     public Optional<MaterialModel> buscarMaterialPorId(Integer id) {
+        if (!materialRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Material não encontrado.");
+        }
         return materialRepository.findById(id);
     }
 
-    public MaterialModel atualizarMaterial(MaterialModel material) {
-        return materialRepository.save(material);
+    public MaterialModel atualizarMaterial(Integer id, MaterialModel materialAtualizado) {
+        if (materialRepository.existsById(id)) {
+            return materialRepository.save(materialAtualizado);
+        } else {
+            throw new ResourceNotFoundException("Id do material não encontrado.");
+        }
     }
 
     public void deletarMaterialPorId(Integer id) {
+        if (!materialRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Id do material não encontrado.");
+        }
         materialRepository.deleteById(id);
     }
 }

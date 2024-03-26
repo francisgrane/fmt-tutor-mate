@@ -1,5 +1,6 @@
 package com.fmt.tutor.controller;
 
+import com.fmt.tutor.exception.ResourceNotFoundException;
 import com.fmt.tutor.model.AgendaModel;
 import com.fmt.tutor.service.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class AgendaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AgendaModel> buscarAgenda(@PathVariable Integer id) {
+    public ResponseEntity<AgendaModel> buscarAgendaPorId(@PathVariable Integer id) {
         Optional<AgendaModel> agendaOptional = agendaService.buscarAgendaPorId(id);
         return agendaOptional.map(agenda -> ResponseEntity.ok().body(agenda))
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -45,14 +46,25 @@ public class AgendaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AgendaModel> atualizarAgenda(@PathVariable Integer id, @RequestBody AgendaModel updatedAgenda) {
-        AgendaModel updated = agendaService.atualizarAgenda(id, updatedAgenda);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<AgendaModel> atualizarAgendaPorId(@PathVariable Integer id, @RequestBody AgendaModel agendaAtualizada) {
+        Optional<AgendaModel> agendaOptional = agendaService.buscarAgendaPorId(id);
+        if (agendaOptional.isPresent()) {
+            AgendaModel agendaExistente = agendaOptional.get();
+            AgendaModel agendaAtualizadaSalvo = agendaService.atualizarAgenda(id, agendaExistente);
+            return ResponseEntity.ok(agendaAtualizadaSalvo);
+        } else {
+            throw new ResourceNotFoundException("Agenda não encontrada para atualizar.");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAgenda(@PathVariable Integer id) {
-        agendaService.deletarAgendaPorId(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletarAgendaPorId(@PathVariable Integer id) {
+        Optional<AgendaModel> agendaOptional = agendaService.buscarAgendaPorId(id);
+        if (agendaOptional.isPresent()) {
+            agendaService.deletarAgendaPorId(id);
+        } else {
+            throw new ResourceNotFoundException("Agenda não encontrada para deletar.");
+        }
+        return null;
     }
 }
