@@ -1,15 +1,12 @@
 package com.fmt.tutor.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "agenda")
+@Data
 public class AgendaModel {
 
     @Id
@@ -24,7 +21,6 @@ public class AgendaModel {
     @JoinColumn(name = "tutor_id", nullable = false)
     private TutorModel tutor;
 
-    @Column(nullable = false)
     private LocalDate data;
 
     private String status;
@@ -98,5 +94,6 @@ public class AgendaModel {
     }
 
     public void setId(Integer id) {
+        this.id = id;
     }
 }
