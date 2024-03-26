@@ -24,7 +24,7 @@ public class TutorController {
     }
 
     @GetMapping
-    public ResponseEntity<ArrayList<TutorModel>> buscarTodosOsTutores() {
+    public ResponseEntity<ArrayList<TutorModel>> listarTodosOsTutores() {
         ArrayList<TutorModel> tutores = (ArrayList<TutorModel>) tutorService.listarTodosOsTutores();
         if (tutores.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -34,7 +34,7 @@ public class TutorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TutorModel> buscarTutorPorId(@PathVariable Integer id) {
+    public ResponseEntity<TutorModel> buscarTutor(@PathVariable Integer id) {
         Optional<TutorModel> tutorOptional = tutorService.buscarTutorPorId(id);
         return tutorOptional.map(tutor -> ResponseEntity.ok().body(tutor))
                 .orElseGet(() -> ResponseEntity.notFound().build());

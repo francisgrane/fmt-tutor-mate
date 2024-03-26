@@ -23,7 +23,7 @@ public class AgendaController {
 
     @GetMapping
     public ResponseEntity<List<AgendaModel>> getAllAgendas() {
-        List<AgendaModel> agendas = agendaService.getAllAgendas();
+        List<AgendaModel> agendas = agendaService.listarTodasAsAgendas();
         if (agendas.isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
@@ -33,26 +33,26 @@ public class AgendaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AgendaModel> getAgendaById(@PathVariable Integer id) {
-        Optional<AgendaModel> agendaOptional = agendaService.getAgendaById(id);
+        Optional<AgendaModel> agendaOptional = agendaService.buscarAgendaPorId(id);
         return agendaOptional.map(agenda -> ResponseEntity.ok().body(agenda))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<AgendaModel> createAgenda(@RequestBody AgendaModel agenda) {
-        AgendaModel newAgenda = agendaService.createAgenda(agenda);
+        AgendaModel newAgenda = agendaService.criarAgenda(agenda);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAgenda);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AgendaModel> updateAgenda(@PathVariable Integer id, @RequestBody AgendaModel updatedAgenda) {
-        AgendaModel updated = agendaService.updateAgenda(id, updatedAgenda);
+    public ResponseEntity<AgendaModel> atualizarAgenda(@PathVariable Integer id, @RequestBody AgendaModel updatedAgenda) {
+        AgendaModel updated = agendaService.atualizarAgenda(id, updatedAgenda);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAgenda(@PathVariable Integer id) {
-        agendaService.deleteAgenda(id);
+        agendaService.deletarAgendaPorId(id);
         return ResponseEntity.noContent().build();
     }
 }

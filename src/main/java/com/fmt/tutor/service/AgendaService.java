@@ -5,6 +5,7 @@ import com.fmt.tutor.repository.AgendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,19 +19,19 @@ public class AgendaService {
         this.agendaRepository = agendaRepository;
     }
 
-    public List<AgendaModel> getAllAgendas() {
-        return agendaRepository.findAll();
+    public ArrayList<AgendaModel> listarTodasAsAgendas() {
+        return (ArrayList<AgendaModel>) agendaRepository.findAll();
     }
 
-    public Optional<AgendaModel> getAgendaById(Integer id) {
+    public Optional<AgendaModel> buscarAgendaPorId(Integer id) {
         return agendaRepository.findById(id);
     }
 
-    public AgendaModel createAgenda(AgendaModel agenda) {
+    public AgendaModel criarAgenda(AgendaModel agenda) {
         return agendaRepository.save(agenda);
     }
 
-    public AgendaModel updateAgenda(Integer id, AgendaModel updatedAgenda) {
+    public AgendaModel atualizarAgenda(Integer id, AgendaModel updatedAgenda) {
         if (agendaRepository.existsById(id)) {
             updatedAgenda.setId(id);
             return agendaRepository.save(updatedAgenda);
@@ -39,7 +40,7 @@ public class AgendaService {
         }
     }
 
-    public void deleteAgenda(Integer id) {
+    public void deletarAgendaPorId(Integer id) {
         agendaRepository.deleteById(id);
     }
 }
