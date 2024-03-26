@@ -22,7 +22,7 @@ public class AgendaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AgendaModel>> getAllAgendas() {
+    public ResponseEntity<List<AgendaModel>> listarTodasAsAgendas() {
         List<AgendaModel> agendas = agendaService.listarTodasAsAgendas();
         if (agendas.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -32,14 +32,14 @@ public class AgendaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AgendaModel> getAgendaById(@PathVariable Integer id) {
+    public ResponseEntity<AgendaModel> buscarAgenda(@PathVariable Integer id) {
         Optional<AgendaModel> agendaOptional = agendaService.buscarAgendaPorId(id);
         return agendaOptional.map(agenda -> ResponseEntity.ok().body(agenda))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<AgendaModel> createAgenda(@RequestBody AgendaModel agenda) {
+    public ResponseEntity<AgendaModel> criarAgenda(@RequestBody AgendaModel agenda) {
         AgendaModel newAgenda = agendaService.criarAgenda(agenda);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAgenda);
     }
@@ -51,7 +51,7 @@ public class AgendaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAgenda(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarAgenda(@PathVariable Integer id) {
         agendaService.deletarAgendaPorId(id);
         return ResponseEntity.noContent().build();
     }
