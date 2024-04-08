@@ -6,6 +6,7 @@ import com.fmt.tutor.repository.AgendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +58,16 @@ public class AgendaService {
 
     public List<AgendaModel> getAgendamentosPorTutorId(Long tutorId) {
         return agendaRepository.findByTutorIdOrderByDataAsc(tutorId);
+    }
+
+    public List<AgendaModel> getProximosAgendamentosPorAlunoId(Long alunoId) {
+        LocalDate hoje = LocalDate.now();
+        return agendaRepository.findByAlunoIdAndDataAfterOrderByDataAsc(alunoId, hoje);
+    }
+
+    public List<AgendaModel> getProximosAgendamentosPorTutorId(Long tutorId) {
+        LocalDate hoje = LocalDate.now();
+        return agendaRepository.findByTutorIdAndDataAfterOrderByDataAsc(tutorId, hoje);
     }
 
 }
