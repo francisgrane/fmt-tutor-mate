@@ -50,4 +50,13 @@ public class AgendaService {
             agendaRepository.deleteById(id);
         }
     }
+
+    public List<AgendaModel> getAgendamentosPorAlunoId(Long alunoId) {
+        return agendaRepository.findByAlunoIdOrderByDataAsc(alunoId);
+    }
+
+    public List<AgendaModel> getAgendamentosPorTutorId(Long tutorId) {
+        return agendaRepository.findByTutorIdOrderByDataAsc(tutorId);
+    }
+
 }
