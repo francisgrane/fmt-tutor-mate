@@ -1,4 +1,3 @@
 # fmt-tutor-mate
 
-Em construção. 
-Ainda não está pronto...
+Atividade semana 10.
