@@ -1,4 +1,4 @@
-# FMT Tutor Agenda Restful API
+# FMT Tutor Mate Restful API
 
 Este projeto é uma API RESTful desenvolvida em Java e Spring Boot para gerenciar agendamentos entre alunos e tutores. 
 Utiliza JDK 17 e banco de dados PostgreSQL com o esquema de banco de dados especificado. Esta é uma atividade
