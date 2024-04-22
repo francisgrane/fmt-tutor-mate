@@ -1,8 +1,7 @@
-# FMT Tutor Mate Restful API
+# Tutor-Mate Restful API
 
 Este projeto é uma API RESTful desenvolvida em Java e Spring Boot para gerenciar agendamentos entre alunos e tutores. 
-Utiliza JDK 17 e banco de dados PostgreSQL com o esquema de banco de dados especificado. Esta é uma atividade
-desenvolvida dentro do módulo de Backend Java, **Lab365**, SENAI - Florianópolis, SC.
+Utiliza JDK 17 e banco de dados PostgreSQL com o esquema de banco de dados especificado. 
 
 ## Autor
 
