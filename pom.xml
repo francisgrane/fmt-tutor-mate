@@ -10,6 +10,7 @@
 	</parent>
 	<groupId>com.fmt</groupId>
 	<artifactId>tutor</artifactId>
+	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>tutor</name>
 	<description>A platform for connecting students with qualified tutors for personalized tutoring sessions and study material sharing.</description>
